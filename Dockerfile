@@ -22,7 +22,7 @@ RUN apt-get update && \
   wget && \
   apt-get autoremove -y
 
-RUN locale-gen en_US.UTF-8
+# RUN locale-gen en_US.UTF-8
 
 RUN adduser --quiet --disabled-password \
   --shell /bin/bash --home /home/${USER} \
@@ -44,7 +44,6 @@ RUN \
   touch /home/${USER}/.ansible-vault/vault.secret && \
   echo '$vault_secret' > /home/${USER}/.ansible-vault/vault.secret
 
-# RUN bash -c "$(curl -fsSL https://raw.githubusercontent.com/TechDufus/dotfiles/main/bin/dotfiles)"
 RUN git clone --quiet https://github.com/andrewcp54/dotfiles.git /home/${USER}/.dotfiles
 COPY --chown=${USER}:${group} ansible.cfg /home/${USER}/.dotfiles/ansible.cfg
 RUN bash -c "/home/${USER}/dotfiles"

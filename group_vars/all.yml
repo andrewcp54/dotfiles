@@ -1,16 +1,16 @@
 default_roles:
   - system
   - fzf
-  - git
+  # - git
   # - k8s
   # - k9s
-  - neovim
+  # - neovim
   # - npm
   # - nvm
   #  - ssh
   # - terraform
   # - tldr
-  # - tmux
+  - tmux
 
 git_user_name: "andrewcp54"
 git_user_email: !vault |
