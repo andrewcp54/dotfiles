@@ -29,8 +29,6 @@
   ansible.builtin.set_fact:
     nodejs_install_needed: true
   when:
-    # - nodejs_installed.rc == 0
-    # - nodejs_up_to_date.rc != 0
     - nodejs_up_to_date.stdout != nodejs_latest_version.stdout
 
 - name: "NPM | Install NodeJS"
@@ -90,6 +88,3 @@
   community.general.npm:
     name: "{{ item }}"
     global: true
-  with_items:
-    - bun
-    - blitz

@@ -1,13 +1,11 @@
 FROM ubuntu:22.04
 
-LABEL maintainer="TechDufus <https://techdufus.com>"
-
-ARG USER=techdufus
-ARG group=techdufus
+ARG USER=andrew
+ARG group=andrew
 ARG uid=1000
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV TZ="America/Chicago"
+ENV TZ="America/Denver"
 
 USER ${USER}
 USER root
@@ -47,12 +45,8 @@ RUN \
   echo '$vault_secret' > /home/${USER}/.ansible-vault/vault.secret
 
 # RUN bash -c "$(curl -fsSL https://raw.githubusercontent.com/TechDufus/dotfiles/main/bin/dotfiles)"
-RUN git clone --quiet https://github.com/TechDufus/dotfiles.git /home/${USER}/.dotfiles
+RUN git clone --quiet https://github.com/andrewcp54/dotfiles.git /home/${USER}/.dotfiles
 COPY --chown=${USER}:${group} ansible.cfg /home/${USER}/.dotfiles/ansible.cfg
 RUN bash -c "/home/${USER}/dotfiles"
 
 RUN rm ~/.ansible-vault/vault.secret
-
-# CMD []
-#
-# ENTRYPOINT ["/bin/bash"]

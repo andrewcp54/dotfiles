@@ -2,6 +2,27 @@
 - name: "Git | Run Tasks: {{ ansible_distribution }}"
   ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
 
+- name: "Git | {{ ansible_distribution }} | Install git"
+  ansible.builtin.apt:
+    name:
+      - git
+    state: present
+  become: true
+
+- name: "Git | {{ ansible_distribution }} | Install git"
+  community.general.pacman:
+    name:
+      - git
+    state: present
+  become: true
+
+- name: "Git | {{ ansible_distribution }} | Install delta pager"
+  community.general.pacman:
+    name:
+      - git-delta
+    state: present
+  become: true
+
 - name: "Git | Set diff.colorMoved"
   community.general.git_config:
     name: diff.colorMoved
@@ -13,13 +34,6 @@
     name: fetch.prune
     scope: global
     value: true
-
-# git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-# - name: "Git | Set URL to SSH"
-#   community.general.git_config:
-#     name: URL
-#     scope: global
-#     value: "git@github.com"
 
 - name: "Git | Set init.defaultBranch"
   community.general.git_config:
@@ -52,62 +66,9 @@
     scope: global
     value: "{{ git_user_name }}"
 
-- name: "Git | Set user.signingkey"
+- name: "Git | Set pager"
   community.general.git_config:
-    name: user.signingkey
+    name: pager
     scope: global
-    value: "{{ ansible_user_dir }}/.ssh/id_ed25519.pub"
+    value: delta
 
-- name: "Git | Set gpg.format"
-  community.general.git_config:
-    name: gpg.format
-    scope: global
-    value: ssh
-
-- name: "Git | Set commit.gpgsign"
-  community.general.git_config:
-    name: commit.gpgsign
-    scope: global
-    value: true
-
-- name: "Git | Set tag.gpgsign"
-  community.general.git_config:
-    name: tag.gpgsign
-    scope: global
-    value: true
-
-- name: "Git | Ensure ~/.config/git/allowed_signers exists"
-  ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config/git"
-    state: directory
-    mode: "0755"
-
-- name: "Git | Configure ~/.config/git/allowed_signers"
-  ansible.builtin.copy:
-    src: allowed_signers
-    dest: "{{ ansible_user_dir }}/.config/git/allowed_signers"
-    mode: "0600"
-
-- name: "Git | Set gpg.ssh.allowedSignersFile"
-  community.general.git_config:
-    name: gpg.ssh.allowedSignersFile
-    scope: global
-    value: "{{ ansible_user_dir }}/.config/git/allowed_signers"
-
-- name: "Git | Set undo alias"
-  community.general.git_config:
-    name: alias.undo
-    scope: global
-    value: "reset HEAD~1 --mixed"
-
-- name: "Git | Copy global.commit.template"
-  ansible.builtin.copy:
-    src: global.commit.template
-    dest: "{{ ansible_user_dir }}/.config/git/commit_template"
-    mode: "0644"
-
-- name: "Git | Set commit.template"
-  community.general.git_config:
-    name: commit.template
-    scope: global
-    value: "{{ ansible_user_dir }}/.config/git/commit_template"

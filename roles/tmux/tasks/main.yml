@@ -8,6 +8,18 @@
   ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
   when: tmux_distribution_config.stat.exists
 
+- name: "Tmux | {{ ansible_distribution }} | Install tmux"
+  ansible.builtin.apt:
+    name: tmux
+    state: present
+  become: true
+
+- name: "Tmux | {{ ansible_distribution }} | Install tmux"
+  community.general.pacman:
+    name: tmux
+    state: present
+  become: true
+
 - name: "Tmux | Install TPM"
   ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm

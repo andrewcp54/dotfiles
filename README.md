@@ -1,21 +1,6 @@
 
-![dotfiles-logo](https://github.com/TechDufus/dotfiles/assets/46715299/6c1d626d-28d2-41e3-bde5-981d9bf93462)
-<p align="center">
-    <a href="https://github.com/TechDufus/dotfiles/actions/workflows/ansible-lint.yml"><img align="center" src="https://github.com/TechDufus/dotfiles/actions/workflows/ansible-lint.yml/badge.svg"/></a>
-    <a href="https://github.com/TechDufus/dotfiles/issues"><img align="center" src="https://img.shields.io/github/issues/techdufus/dotfiles"/></a>
-    <a href="https://github.com/sponsors/TechDufus"><img align="center" src="https://img.shields.io/github/sponsors/techdufus"/></a>
-    <a href="https://discord.gg/5M4hjfyRBj"><img align="center" src="https://img.shields.io/discord/905178979844116520.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"/></a>
-    <a href="https://github.com/TechDufus/dotfiles/commits/main"><img align="center" src="https://img.shields.io/github/commit-activity/m/techdufus/dotfiles" alt="commit frequency"></a>
-</p>
-
 ---
-Fully automated development environment for [TechDufus](https://www.twitch.tv/TechDufus) on Twitch.
-
-You can watch a quick 'tour' here on YouTube:
-
-<a href="https://youtu.be/hPPIScBt4Gw">
-    <img src="https://github.com/TechDufus/dotfiles/assets/46715299/b114ea0c-b67b-437b-87d3-7c7732aeccf8" alt="Automating your Dotfiles with Ansible: A Showcase" style="width:60%;"/>
-</a>
+Fully automated development environment for me. :) ~~TechDufus~~
 
 This repo is heavily influenced by [ALT-F4-LLC](https://github.com/ALT-F4-LLC/dotfiles)'s repo. Go check it out!
 
@@ -44,9 +29,6 @@ sudo apt-get update && sudo apt-get upgrade -y
 # Arch
 sudo pacman -Syu
 ```
-
-> NOTE: This will take some time.
-
 ## Setup
 
 ### all.yaml values file
@@ -62,41 +44,11 @@ Below is a list of all available values. Not all are required but incorrect valu
 | exclude_roles         | array `(see group_vars/all)`        | no       |
 | ssh_key               | dict `(see SSH Keys below)`         | no       |
 | system_host           | dict `(see System Hosts below)`     | no       |
-| bash_public           | dict `(see Environment below)`      | no       |
-| bash_private          | dict `(see Environment below)`      | no       |
 
 
 #### Environment
 
 Manage environment variables by configuring the `bash_public` and `bash_private` values in `values.yaml`. See both values usecase below.
-
-##### bash_public
-
-The `bash_public` value allows you to include a dictionary of generic and unsecure key-value pairs that will be stored in a `~/.bash_public`.
-
-```yaml
-
----
-bash_public:
-  MY_ENV_VAR: something
-```
-
-#### bash_private
-
-The `bash_private` value allows you to include a dictionary of secure key-value pairs that will be stored in a `~/.bash_private`.
-
-```yaml
-
----
-bash_private:
-  MY_ENV_VAR_SECRET: !vault |
-    $ANSIBLE_VAULT;1.1;AES256
-    62333533626436313366316235626561626635396233303730343332666466393561346462303163
-    3666636638613437353663356563656537323136646137630a336332303030323031376164316562
-    65333963633339323382938472963766303966643035303234376163616239663539366564396166
-    3830376265316231630a623834333061393138306331653164626437623337366165636163306237
-    3437
-```
 
 ### SSH Keys
 
