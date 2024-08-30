@@ -8,17 +8,19 @@
   ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
   when: tmux_distribution_config.stat.exists
 
-- name: "Tmux | {{ ansible_distribution }} | Install tmux"
+- name: "Tmux | ubuntu | Install tmux"
   ansible.builtin.apt:
     name: tmux
     state: present
   become: true
+  when: ansible_distribution in ["Debian", "Ubuntu"]
 
-- name: "Tmux | {{ ansible_distribution }} | Install tmux"
+- name: "Tmux | arch | Install tmux"
   community.general.pacman:
     name: tmux
     state: present
   become: true
+  when: ansible_distribution in ["ArchLinux", "Manjaro"]
 
 - name: "Tmux | Install TPM"
   ansible.builtin.git:
