@@ -15,19 +15,3 @@
     dest: "/usr/local/bin/kitty"
     state: link
     force: yes
-
-- name: Add Kitty to the system PATH if using bash
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_user_dir }}/.bashrc"
-    line: 'export PATH="$PATH:{{ ansible_user_dir }}/.local/kitty.app/bin"'
-    state: present
-    create: yes
-  when: ansible_env.SHELL in ['/bin/bash', '/usr/bin/bash']
-
-- name: Add Kitty to the system PATH if using zsh
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_user_dir }}/.zshrc"
-    line: 'export PATH="$PATH:{{ ansible_user_dir }}/.local/kitty.app/bin"'
-    state: present
-    create: yes
-  when: ansible_env.SHELL in ['/bin/zsh', '/usr/bin/zsh']
