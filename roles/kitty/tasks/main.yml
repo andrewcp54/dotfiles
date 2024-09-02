@@ -1,12 +1,37 @@
 ---
-- name: Install Kitty on Debian-based systems
-  apt:
-    name: kitty
-    state: present
-  when: ansible_os_family == "Debian"
+- name: Install Kitty terminal emulator using curl and add to PATH
+  become: true
+  tasks:
+    - name: Download and install Kitty using curl
+      ansible.builtin.shell: |
+        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+      args:
+        creates: "{{ ansible_user_dir }}/.local/kitty.app"
+      environment:
+        LC_ALL: C.UTF-8
+        LANG: C.UTF-8
 
-- name: Install Kitty on Arch-based systems
-  pacman:
-    name: kitty
-    state: present
-  when: ansible_distribution in ["Archlinux", "Manjaro"]
+    - name: Create a symbolic link to the Kitty executable
+      ansible.builtin.file:
+        src: "{{ ansible_user_dir }}/.local/kitty.app/bin/kitty"
+        dest: "/usr/local/bin/kitty"
+        state: link
+      become: yes
+      args:
+        creates: /usr/local/bin/kitty
+
+    - name: Add Kitty to the system PATH if not already added
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_user_dir }}/.bashrc"
+        line: 'export PATH="$PATH:{{ ansible_user_dir }}/.local/kitty.app/bin"'
+        state: present
+        create: yes
+      when: ansible_env.SHELL in ['/bin/bash', '/usr/bin/bash']
+
+    - name: Add Kitty to the system PATH for Zsh users
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_user_dir }}/.zshrc"
+        line: 'export PATH="$PATH:{{ ansible_user_dir }}/.local/kitty.app/bin"'
+        state: present
+        create: yes
+      when: ansible_env.SHELL in ['/bin/zsh', '/usr/bin/zsh']
