@@ -5,7 +5,8 @@ default_roles:
   # - k8s
   # - k9s
   # - neovim
-  - kitty
+  - zsh
+  # - kitty
   # - npm
   # - nvm
   #  - ssh

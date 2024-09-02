@@ -1,14 +1,6 @@
 ---
-- name: "Neovim | Checking for Distribution Config: {{ ansible_distribution }}"
-  ansible.builtin.stat:
-    path: "{{ role_path }}/tasks/{{ ansible_distribution }}.yml"
-  register: neovim_distribution_config
-
-- name: "Neovim | Run Tasks: {{ ansible_distribution }}"
-  ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
-  when: neovim_distribution_config.stat.exists
-
-- name: "Neovim | Config folder"
+- name: "Neovim | Create Config folder"
+  become: true
   ansible.builtin.file:
     mode: "0755"
     path: "{{ ansible_user_dir }}/.config/nvim"
@@ -19,10 +11,9 @@
   ansible.builtin.shell: |
     rm -rf "{{ ansible_user_dir }}/.config/nvim"
     ln -s "{{ role_path }}/files" "{{ ansible_user_dir }}/.config/nvim"
-  args:
-    creates: "{{ ansible_user_dir }}/.config/nvim"
 
 - name: "Neovim | {{ ansible_distribution }} | Dependencies"
+  become: true
   ansible.builtin.apt:
     name:
       - cmake
@@ -33,13 +24,11 @@
       - ansible-lint
       - ripgrep
     state: present
-  become: true
 
 - name: "Neovim | {{ ansible_distribution }} | Install"
   ansible.builtin.apt_repository:
     repo: ppa:neovim-ppa/unstable
     state: present
-  become: true
   when: ansible_distribution in ["Ubuntu", "Debian"]
 
 - name: Install Neovim on Arch-based systems
