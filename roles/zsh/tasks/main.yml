@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.shell: |
     rm -rf "{{ ansible_user_dir }}/.zshrc" "{{ ansible_user_dir }}/.zprofile"
-    ln -s "{{ role_path }}/files" "{{ ansible_user_dir }}/"
+    ln -s "{{ role_path }}/files/*" "{{ ansible_user_dir }}"
 
 - name: Zsh | ubuntu | Install
   become: true
