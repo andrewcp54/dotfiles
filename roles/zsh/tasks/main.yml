@@ -1,0 +1,19 @@
+---
+- name: "zsh | Replace ~/.zshrc and ~/.zprofile with symlink to role files directory"
+  become: true
+  ansible.builtin.shell: |
+    rm -rf "{{ ansible_user_dir }}/.zshrc" "{{ ansible_user_dir }}/.zprofile"
+    ln -s "{{ role_path }}/files" "{{ ansible_user_dir }}/"
+
+- name: Zsh | ubuntu | Install
+  become: true
+  apt:
+    name: zsh
+    state: present
+  when: ansible_distribution in ["Ubuntu", "Debian"]
+
+- name: Zsh | arch | Install
+  pacman:
+    name: zsh
+    state: present
+  when: ansible_distribution in ["Archlinux", "Manjaro"]

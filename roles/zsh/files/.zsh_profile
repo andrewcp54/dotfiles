@@ -1,0 +1,16 @@
+export DOTFILES=$HOME/.dotfiles
+
+pathedit() {
+    [[ -z $1 ]] && return 2
+    PATH=:$PATH: PATH=${PATH//:$1:/}
+    PATH=$1$PATH
+    while [[ $PATH == *::* ]] ; do
+        PATH=${PATH//::/:}
+    done
+    PATH=${PATH#:} PATH=${PATH%:}
+}
+
+pathedit $HOME/.local/bin
+
+# Where should I put you?
+bindkey -s "^f" "tmux-sessionizer\n"
