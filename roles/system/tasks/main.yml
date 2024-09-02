@@ -14,4 +14,36 @@
     src: hosts.j2
     mode: "0644"
   become: true
-  when: not ansible_host_environment_is_wsl
+
+- name: "System | {{ ansible_distribution }} | Update APT Repos and Upgrade APT Packages"
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: full
+    autoremove: true
+    autoclean: true
+  become: true
+  when: ansible_os_family == 'Debian'
+
+- name: "System | {{ ansible_distribution }} | Install"
+  ansible.builtin.apt:
+    name:
+      - jq
+    state: present
+  become: true
+  when: ansible_os_family == 'Debian'
+
+- name: "System | {{ ansible_distribution }} | Update pacman"
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+    state: latest
+  become: true
+  when: ansible_os_family == 'Archlinux'
+
+- name: "System | {{ ansible_distribution }} | Install"
+  community.general.pacman:
+    name:
+      - jq
+    state: present
+  become: true
+  when: ansible_os_family == 'Archlinux'

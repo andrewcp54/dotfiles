@@ -41,7 +41,7 @@
       ansible.builtin.set_fact:
         nodejs_arch: "{{ ansible_machine | replace('x86_64', 'x64') | replace('aarch64', 'arm64') }}"
 
-    - name: "NPM | Register Pagkage Name"
+    - name: "NPM | Register Pakage Name"
       ansible.builtin.set_fact:
         nodejs_package_name: "node-{{ nodejs_latest_version.stdout }}-{{ ansible_system | lower }}-{{ nodejs_arch }}"
 
@@ -76,15 +76,3 @@
         path: /usr/local/lib/node_modules
         state: directory
         mode: "0755"
-
-    - name: "NPM | Copy NodeJS Modules"
-      ansible.builtin.copy:
-        src: /tmp/{{ nodejs_package_name }}/lib/node_modules/
-        dest: /usr/local/lib/node_modules/*
-        remote_src: true
-        mode: "0644"
-
-- name: "NPM | Install NPM Packages"
-  community.general.npm:
-    name: "{{ item }}"
-    global: true

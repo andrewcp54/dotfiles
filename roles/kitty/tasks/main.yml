@@ -1,0 +1,12 @@
+---
+- name: Install Kitty on Debian-based systems
+  apt:
+    name: kitty
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Kitty on Arch-based systems
+  pacman:
+    name: kitty
+    state: present
+  when: ansible_distribution in ["Archlinux", "Manjaro"]

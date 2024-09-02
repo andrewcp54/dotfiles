@@ -14,12 +14,13 @@
     path: "{{ ansible_user_dir }}/.config/nvim"
     state: directory
 
-- name: "Neovim | Create symlink to role files directory"
-  ansible.builtin.file:
-    src: "{{ role_path }}/files"
-    dest: "{{ ansible_user_dir }}/.config/nvim"
-    state: link
-    force: true
+- name: "Neovim | Replace ~/.config/nvim with symlink to role files directory"
+  become: true
+  ansible.builtin.shell: |
+    rm -rf "{{ ansible_user_dir }}/.config/nvim"
+    ln -s "{{ role_path }}/files" "{{ ansible_user_dir }}/.config/nvim"
+  args:
+    creates: "{{ ansible_user_dir }}/.config/nvim"
 
 - name: "Neovim | {{ ansible_distribution }} | Dependencies"
   ansible.builtin.apt:
@@ -39,3 +40,10 @@
     repo: ppa:neovim-ppa/unstable
     state: present
   become: true
+  when: ansible_distribution in ["Ubuntu", "Debian"]
+
+- name: Install Neovim on Arch-based systems
+  pacman:
+    name: neovim
+    state: present
+  when: ansible_distribution in ["Archlinux", "Manjaro"]

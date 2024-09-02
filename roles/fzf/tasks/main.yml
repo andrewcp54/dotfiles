@@ -1,4 +1,19 @@
 ---
-- name: Run Ubuntu Tasks
-  ansible.builtin.import_tasks: ubuntu.yml
+- name: "FZF | Uninstall (debian)"
+  apt:
+     name: fzf
+     state: absent
   when: ansible_os_family == 'Debian'
+
+- name: "FZF | Uninstall (arch)"
+  community.general.pacman:
+     name: fzf
+     state: absent
+  when: ansible_os_family == 'Archlinux'
+
+- name: "FZF | Clone Latest Version"
+  ansible.builtin.git:
+    repo: https://github.com/junegunn/fzf.git
+    depth: 1
+    dest: "{{ ansible_user_dir }}/.fzf"
+  notify: "Install FZF"

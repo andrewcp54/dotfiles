@@ -5,10 +5,6 @@
   register: nvm_latest_version_json
   changed_when: false
 
-- name: "NVM | Registering NVM Latest Release"
-  ansible.builtin.set_fact:
-    nvm_latest_release: "{{ nvm_latest_version_json.json.tag_name }}"
-
 - name: "NVM | Registering NVM Latest Version"
   ansible.builtin.set_fact:
     nvm_latest_version: "{{ nvm_latest_release.stdout | default('') }}"
