@@ -9,6 +9,7 @@
     LANG: C.UTF-8
 
 - name: Create a symbolic link to the Kitty executable
+  become: true
   ansible.builtin.file:
     src: "{{ ansible_user_dir }}/.local/kitty.app/bin/kitty"
     dest: "/usr/local/bin/kitty"
