@@ -1,6 +1,5 @@
 ---
 - name: Download and install Kitty using curl
-  become: true
   ansible.builtin.shell: |
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
   args:
@@ -10,16 +9,13 @@
     LANG: C.UTF-8
 
 - name: Create a symbolic link to the Kitty executable
-  become: true
   ansible.builtin.file:
     src: "{{ ansible_user_dir }}/.local/kitty.app/bin/kitty"
     dest: "/usr/local/bin/kitty"
     state: link
-  args:
-    creates: /usr/local/bin/kitty
+    force: yes
 
 - name: Add Kitty to the system PATH if using bash
-  become: true
   ansible.builtin.lineinfile:
     path: "{{ ansible_user_dir }}/.bashrc"
     line: 'export PATH="$PATH:{{ ansible_user_dir }}/.local/kitty.app/bin"'
@@ -28,7 +24,6 @@
   when: ansible_env.SHELL in ['/bin/bash', '/usr/bin/bash']
 
 - name: Add Kitty to the system PATH if using zsh
-  become: true
   ansible.builtin.lineinfile:
     path: "{{ ansible_user_dir }}/.zshrc"
     line: 'export PATH="$PATH:{{ ansible_user_dir }}/.local/kitty.app/bin"'
